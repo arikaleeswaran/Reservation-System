@@ -6,9 +6,11 @@ import {faCircleArrowLeft, faCircleArrowRight, faCircleXmark, faL, faLocationDot
 import MailList from "../../components/maillist/MailList"
 import Footer from "../../components/footer/Footer"
 import { useContext, useState } from "react"
-import { useLocation } from "react-router-dom"
+import { Navigate, useLocation, useNavigate } from "react-router-dom"
 import useFetch from "../../hooks/useFetch"
 import { SearchContext } from "../../context/SearchContext.js"
+import { AuthContext } from "../../context/AuthContext.js"
+import Reserve from "../../components/reserve/Reserve.jsx"
 
 
 function Hotel() {
@@ -17,9 +19,13 @@ function Hotel() {
   const id = location.pathname.split("/")[2]
   const [slideNumber,setSlideNumber] = useState(0);
   const [open,setOpen] = useState(false);
+  const[openModel,setOpenModel] = new useState(false);
 
   const {data,loading,error,reFetch} = useFetch(`/hotels/find/${id}`);
   const {dates,options} = useContext(SearchContext)
+
+  const {user} = useContext(AuthContext);
+  const navigate = useNavigate();
   // console.log(dates);
 
   const MILLISECONDS_PER_DAY = 1000*60*60*24;
@@ -46,6 +52,14 @@ function Hotel() {
     setSlideNumber(newSlideNUmber)
   }
 
+  const handleClick = ()=>{
+    if(user) {
+      setOpenModel(true);
+    }else{
+      navigate("/login")
+    }
+  }
+
   return (
     <div>
       <Navbar/>
@@ -60,7 +74,7 @@ function Hotel() {
         <FontAwesomeIcon icon={faCircleArrowRight} className="arrow" onClick = {()=>handleMove("r")}/>
         </div>}
         <div className="hotelWrapper">
-          <button className="bookNow">Reserve or Book Now!</button>
+          <button className="bookNow" onClick={handleClick}>Reserve or Book Now!</button>
           <h1 className="hotelTitle">{data.name}</h1>
           <div className="hotelAddress">
             <FontAwesomeIcon icon={faLocationDot}/>
@@ -105,6 +119,7 @@ function Hotel() {
         <MailList/>
         <Footer/>
       </div>}
+      {openModel && <Reserve setOpen={setOpenModel} hotelId={id}/>}
     </div>
   )
 }
