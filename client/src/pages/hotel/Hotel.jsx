@@ -35,7 +35,7 @@ function Hotel() {
     return diffDays;
   }
   
-  const days = dayDifference(dates[0].endDate, dates[0].startDate);
+  const days = dates[0]?.startDate && dates[0]?.endDate ? dayDifference(new Date(dates[0].endDate), new Date(dates[0].startDate)) : 1;
   
 
   const handleOpen = (i)=>{
