@@ -28,6 +28,9 @@ function Reserve({setOpen,hotelId}) {
     : [];
     console.log(allDates);
     
+    const isAvailable = (roomNumber) =>{
+        
+    }
 
     const handleSelect =(e)=>{
         const checked = e.target.checked;
