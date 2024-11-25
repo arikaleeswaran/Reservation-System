@@ -34,6 +34,34 @@ import Room from "../models/Room.js";
         next(err);
     }
 };
+export const updateRoomAvailability = async (req,res,next) =>{
+    try{
+        console.log("hello",req.params.id,req.body.dates);
+
+        const room = await Room.findOne({
+            "roomNumbers._id":req.params.id
+        });
+
+        if(!room){
+            return res.status(404).json("Room not found!");
+        }
+        
+      await Room.updateOne(
+        {"roomNumbers._id":req.params.id},
+        {
+            $push:{
+                "roomNumbers.$.unavailableDates": {
+                    $each : req.body.dates
+                }
+            },
+        });
+        res.status(200).json("Room status has been updated.");
+
+    }catch(err){
+        next(err);
+    }
+};
+
 export const deleteRoom = async (req,res,next) =>{
     const hotelId = req.params.hotelid;
     try{
