@@ -13,7 +13,7 @@ router.put("/:id", verifyAdmin,updateRoom);
 
 
 //DELETE
-    router.delete("/:id/:hotelid", verifyAdmin,deleteRoom);
+    router.delete("/:id", verifyAdmin,deleteRoom);
 
 //GET
     router.get("/:id",getRoom);
